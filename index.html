@@ -1,0 +1,943 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head><base href="https://d16ilfvy4mv02r.cloudfront.net/workspaces/1x5rMtKxUgtI4oDKS5ctL5TTwVhOxBZ0/bc8d7cdc-9fb3-4d61-81e1-ec14a737116d/files/">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🧠💥 BRAINROT GROWTH LAB</title>
+<style>
+  :root{
+    --neon-pink:#ff2ec4;
+    --neon-green:#39ff14;
+    --neon-blue:#00e5ff;
+    --neon-yellow:#fff700;
+    --neon-purple:#b026ff;
+    --bg-dark:#0a0014;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    min-height:100vh;
+    font-family:'Segoe UI', Arial, sans-serif;
+    background: radial-gradient(circle at 20% 20%, #1a0033, #0a0014 60%), var(--bg-dark);
+    color:#fff;
+    overflow-x:hidden;
+  }
+  body::before{
+    content:"";
+    position:fixed; inset:0;
+    background: repeating-linear-gradient(0deg, rgba(255,255,255,0.02) 0px, rgba(255,255,255,0.02) 2px, transparent 2px, transparent 4px);
+    pointer-events:none;
+    z-index:0;
+  }
+  header{
+    text-align:center;
+    padding:28px 16px 10px;
+    position:relative;
+    z-index:1;
+  }
+  header h1{
+    font-size:clamp(28px,6vw,52px);
+    margin:0;
+    letter-spacing:1px;
+    background:linear-gradient(90deg,var(--neon-pink),var(--neon-yellow),var(--neon-blue),var(--neon-green));
+    background-size:300% 300%;
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+    animation:gradientShift 4s ease infinite, textWobble 2.5s ease-in-out infinite;
+    text-shadow:0 0 30px rgba(255,46,196,0.3);
+  }
+  header p{
+    color:#d9c9ff;
+    font-size:15px;
+    margin:6px 0 0;
+    font-style:italic;
+  }
+  @keyframes gradientShift{
+    0%{background-position:0% 50%;}
+    50%{background-position:100% 50%;}
+    100%{background-position:0% 50%;}
+  }
+  @keyframes textWobble{
+    0%,100%{transform:rotate(-0.5deg);}
+    50%{transform:rotate(0.5deg);}
+  }
+
+  .input-section{
+    max-width:600px;
+    margin:20px auto 10px;
+    display:flex;
+    gap:10px;
+    padding:0 16px;
+    position:relative;
+    z-index:1;
+  }
+  #hobbyInput{
+    flex:1;
+    padding:14px 18px;
+    border-radius:14px;
+    border:2px solid var(--neon-purple);
+    background:rgba(255,255,255,0.06);
+    color:#fff;
+    font-size:16px;
+    outline:none;
+    transition:box-shadow .2s, border-color .2s;
+  }
+  #hobbyInput:focus{
+    border-color:var(--neon-pink);
+    box-shadow:0 0 18px rgba(255,46,196,0.6);
+  }
+  #hobbyInput::placeholder{color:#b9a6e0;}
+  #speciesSelect{
+    padding:14px 12px;
+    border-radius:14px;
+    border:2px solid var(--neon-blue);
+    background:rgba(255,255,255,0.06);
+    color:#fff;
+    font-size:14px;
+    outline:none;
+    font-weight:700;
+  }
+  #speciesSelect option{background:#1a0033; color:#fff;}
+  #addBtn{
+    padding:14px 22px;
+    border:none;
+    border-radius:14px;
+    background:linear-gradient(135deg,var(--neon-pink),var(--neon-purple));
+    color:#fff;
+    font-weight:800;
+    font-size:15px;
+    cursor:pointer;
+    letter-spacing:0.5px;
+    box-shadow:0 0 16px rgba(255,46,196,0.5);
+    transition:transform .15s;
+  }
+  #addBtn:hover{transform:scale(1.06) rotate(-1deg);}
+  #addBtn:active{transform:scale(0.95);}
+
+  #errorMsg{
+    max-width:600px;
+    margin:6px auto;
+    padding:0 16px;
+    text-align:center;
+    color:var(--neon-yellow);
+    font-size:13px;
+    min-height:18px;
+    position:relative;
+    z-index:1;
+  }
+
+  .grid{
+    max-width:1200px;
+    margin:20px auto 60px;
+    padding:0 16px;
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
+    gap:22px;
+    position:relative;
+    z-index:1;
+  }
+
+  .card{
+    background:linear-gradient(160deg, rgba(255,255,255,0.07), rgba(255,255,255,0.02));
+    border:2px solid rgba(255,255,255,0.15);
+    border-radius:20px;
+    padding:18px;
+    position:relative;
+    overflow:hidden;
+    backdrop-filter:blur(6px);
+    transition:transform .2s;
+  }
+  .card:hover{transform:translateY(-4px);}
+  .card.stage5{
+    border-color:var(--neon-pink);
+    box-shadow:0 0 30px rgba(255,46,196,0.5), inset 0 0 40px rgba(176,38,255,0.15);
+  }
+  .card.stage4{border-color:var(--neon-purple); box-shadow:0 0 18px rgba(176,38,255,0.35);}
+  .card.stage3{border-color:var(--neon-blue);}
+
+  .card-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    gap:8px;
+  }
+  .hobby-name{
+    font-size:20px;
+    font-weight:900;
+    text-transform:uppercase;
+    letter-spacing:0.5px;
+    background:linear-gradient(90deg,var(--neon-green),var(--neon-blue));
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+    line-height:1.15;
+  }
+  .stage-badge{
+    font-size:10px;
+    background:rgba(255,255,255,0.12);
+    padding:4px 8px;
+    border-radius:20px;
+    white-space:nowrap;
+    font-weight:700;
+    color:var(--neon-yellow);
+  }
+  .delete-btn{
+    background:none;border:none;color:#ff6b6b;font-size:16px;cursor:pointer;
+    opacity:.5; transition:opacity .15s;
+  }
+  .delete-btn:hover{opacity:1;}
+
+  .creature-stage{
+    position:relative;
+    height:150px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    margin:10px 0;
+  }
+  .creature{
+    position:relative;
+    width:100px;height:100px;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .blob{
+    width:70px;height:70px;
+    border-radius:50%;
+    position:relative;
+    display:flex;align-items:center;justify-content:center;
+    transition:all .3s;
+  }
+  .eye{
+    width:14px;height:14px;background:#111;border-radius:50%;position:absolute;top:38%;
+  }
+  .eye.left{left:26%;}
+  .eye.right{right:26%;}
+  .eye::after{
+    content:"";position:absolute;top:2px;left:2px;width:4px;height:4px;background:#fff;border-radius:50%;
+  }
+  .mouth{
+    position:absolute;bottom:26%;width:24px;height:10px;border-bottom:3px solid #111;border-radius:0 0 50% 50%;
+  }
+  .limb{
+    position:absolute;width:8px;height:24px;background:inherit;border-radius:8px;
+  }
+  .spark{
+    position:absolute;font-size:14px;
+  }
+  .glow-ring{
+    position:absolute;width:130px;height:130px;border-radius:50%;
+    background:radial-gradient(circle, rgba(255,46,196,0.35), transparent 70%);
+    filter:blur(2px);
+    animation:pulseRing 1.6s ease-in-out infinite;
+  }
+  @keyframes pulseRing{
+    0%,100%{transform:scale(0.9); opacity:.6;}
+    50%{transform:scale(1.15); opacity:1;}
+  }
+
+  /* Stage-specific animations */
+  .anim-idle1{animation:idle1 3s ease-in-out infinite;}
+  @keyframes idle1{0%,100%{transform:translateY(0);}50%{transform:translateY(-4px);}}
+
+  .anim-idle2{animation:idle2 2.2s ease-in-out infinite;}
+  @keyframes idle2{
+    0%,100%{transform:translateY(0) scale(1);}
+    50%{transform:translateY(-6px) scale(1.03);}
+  }
+
+  .anim-idle3{animation:idle3 1.4s ease-in-out infinite;}
+  @keyframes idle3{
+    0%,100%{transform:rotate(-2deg) translateY(0);}
+    50%{transform:rotate(2deg) translateY(-5px);}
+  }
+
+  .anim-idle4{animation:idle4 .8s ease-in-out infinite;}
+  @keyframes idle4{
+    0%,100%{transform:translate(0,0) rotate(-3deg);}
+    25%{transform:translate(1px,-3px) rotate(2deg);}
+    50%{transform:translate(-1px,-6px) rotate(-2deg);}
+    75%{transform:translate(1px,-3px) rotate(3deg);}
+  }
+
+  .anim-idle5{animation:idle5 .35s linear infinite;}
+  @keyframes idle5{
+    0%{transform:translate(0,0) rotate(0deg);}
+    20%{transform:translate(2px,-2px) rotate(3deg);}
+    40%{transform:translate(-2px,2px) rotate(-3deg);}
+    60%{transform:translate(2px,2px) rotate(2deg);}
+    80%{transform:translate(-2px,-2px) rotate(-2deg);}
+    100%{transform:translate(0,0) rotate(0deg);}
+  }
+
+  .feed-pulse{
+    animation:feedPulse .6s ease;
+  }
+  @keyframes feedPulse{
+    0%{transform:scale(1);}
+    30%{transform:scale(1.35) rotate(8deg);}
+    60%{transform:scale(0.9) rotate(-8deg);}
+    100%{transform:scale(1) rotate(0deg);}
+  }
+  .card.glitching{animation:cardGlitch .4s;}
+  @keyframes cardGlitch{
+    0%{filter:none;}
+    20%{filter:hue-rotate(90deg) saturate(3); transform:translateX(-3px);}
+    40%{filter:hue-rotate(-90deg); transform:translateX(3px);}
+    60%{filter:hue-rotate(45deg); transform:translateX(-2px);}
+    80%{filter:none; transform:translateX(2px);}
+    100%{filter:none; transform:translateX(0);}
+  }
+
+  .counter-row{
+    display:flex; justify-content:space-between; align-items:center;
+    margin:10px 0 6px; font-size:13px; color:#c9b8ff;
+  }
+  .counter-num{
+    font-size:22px; font-weight:900; color:var(--neon-yellow);
+    text-shadow:0 0 8px rgba(255,247,0,0.6);
+  }
+  .feed-btn{
+    width:100%;
+    padding:12px;
+    border:none;
+    border-radius:12px;
+    background:linear-gradient(135deg,var(--neon-blue),var(--neon-purple));
+    color:#fff;
+    font-weight:800;
+    font-size:14px;
+    cursor:pointer;
+    letter-spacing:0.3px;
+    box-shadow:0 0 14px rgba(0,229,255,0.4);
+    transition:transform .12s;
+  }
+  .feed-btn:hover{transform:scale(1.03);}
+  .feed-btn:active{transform:scale(0.94);}
+  .feed-btn:disabled{
+    background:linear-gradient(135deg,#555,#333);
+    box-shadow:none;
+    cursor:default;
+    opacity:0.7;
+  }
+
+  .flavor-text{
+    font-size:12px;
+    color:#a598c9;
+    text-align:center;
+    min-height:16px;
+    margin-top:8px;
+    font-style:italic;
+  }
+
+  .achievement-badge{
+    display:inline-block;
+    margin-top:6px;
+    font-size:10px;
+    background:linear-gradient(90deg,var(--neon-pink),var(--neon-yellow));
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+    font-weight:900;
+    letter-spacing:0.5px;
+  }
+
+  .toast-container{
+    position:fixed;
+    top:16px; left:50%; transform:translateX(-50%);
+    z-index:999;
+    display:flex; flex-direction:column; gap:8px;
+    align-items:center;
+  }
+  .toast{
+    background:linear-gradient(135deg,var(--neon-pink),var(--neon-purple));
+    padding:10px 20px;
+    border-radius:30px;
+    font-weight:800;
+    font-size:13px;
+    box-shadow:0 4px 20px rgba(255,46,196,0.5);
+    animation:toastIn .3s ease, toastOut .3s ease 2.4s forwards;
+  }
+  @keyframes toastIn{from{opacity:0; transform:translateY(-20px);} to{opacity:1; transform:translateY(0);}}
+  @keyframes toastOut{to{opacity:0; transform:translateY(-20px);}}
+
+  .voice-line{
+    position:absolute;
+    font-weight:900;
+    font-size:14px;
+    color:var(--neon-yellow);
+    text-shadow:0 0 6px rgba(255,247,0,0.8), 2px 2px 0 #000;
+    animation:voiceFloat 1s ease forwards;
+    pointer-events:none;
+    top:0; left:50%;
+    white-space:nowrap;
+  }
+  @keyframes voiceFloat{
+    0%{opacity:0; transform:translate(-50%,10px) scale(0.6);}
+    30%{opacity:1; transform:translate(-50%,-10px) scale(1.2);}
+    100%{opacity:0; transform:translate(-50%,-40px) scale(1);}
+  }
+
+  .empty-state{
+    text-align:center;
+    color:#8a76b8;
+    grid-column:1/-1;
+    padding:40px 10px;
+    font-size:15px;
+  }
+
+  footer{
+    text-align:center;
+    color:#5f4d80;
+    font-size:11px;
+    padding:16px;
+    position:relative;
+    z-index:1;
+  }
+
+  .species-tag{
+    display:inline-block;
+    font-size:9px;
+    margin-top:4px;
+    padding:2px 7px;
+    border-radius:10px;
+    background:rgba(255,255,255,0.1);
+    color:var(--neon-blue);
+    font-weight:700;
+    letter-spacing:0.5px;
+  }
+  .max-badge{
+    display:inline-block;
+    margin-top:4px;
+    font-size:9px;
+    padding:3px 8px;
+    border-radius:10px;
+    background:linear-gradient(90deg,#ffd23f,#ff2ec4);
+    color:#1a0033;
+    font-weight:900;
+    letter-spacing:0.5px;
+  }
+  .shoe{
+    position:absolute;
+    width:16px;height:10px;
+    background:#fff;
+    border-radius:4px 4px 2px 2px;
+    border:2px solid #111;
+    bottom:-6px;
+  }
+  .shoe.left{left:6px;}
+  .shoe.right{right:6px;}
+  .tooth{
+    position:absolute;
+    width:0;height:0;
+    border-left:4px solid transparent;
+    border-right:4px solid transparent;
+    border-top:7px solid #fff;
+  }
+  .fin{
+    position:absolute;
+    width:0;height:0;
+  }
+  .drum-band{
+    position:absolute;
+    width:100%;height:8px;
+    background:#5a3a1a;
+    border-top:2px solid #2e1c0a;
+    border-bottom:2px solid #2e1c0a;
+  }
+  .drum-band.top{top:18%;}
+  .drum-band.bottom{bottom:18%;}
+  .drumstick{
+    position:absolute;
+    width:6px;height:34px;
+    background:#c98a4b;
+    border:2px solid #6b431c;
+    border-radius:4px;
+  }
+
+  .log-section{
+    display:flex;
+    gap:6px;
+    margin-top:8px;
+  }
+  .log-input{
+    flex:1;
+    padding:10px 12px;
+    border-radius:10px;
+    border:2px solid rgba(255,255,255,0.2);
+    background:rgba(255,255,255,0.06);
+    color:#fff;
+    font-size:13px;
+    outline:none;
+    min-width:0;
+  }
+  .log-input:focus{border-color:var(--neon-green); box-shadow:0 0 10px rgba(57,255,20,0.4);}
+  .log-input::placeholder{color:#a598c9;}
+  .log-btn{
+    padding:10px 14px;
+    border:none;
+    border-radius:10px;
+    background:linear-gradient(135deg,var(--neon-green),var(--neon-blue));
+    color:#08210a;
+    font-weight:900;
+    font-size:12px;
+    cursor:pointer;
+    white-space:nowrap;
+    box-shadow:0 0 12px rgba(57,255,20,0.4);
+    transition:transform .12s;
+  }
+  .log-btn:hover{transform:scale(1.05);}
+  .log-btn:active{transform:scale(0.93);}
+  .log-btn:disabled{background:linear-gradient(135deg,#555,#333); color:#999; box-shadow:none; cursor:default;}
+  .log-input:disabled{opacity:0.5;}
+  .last-log{
+    font-size:11px;
+    color:#a598c9;
+    margin-top:6px;
+    font-style:italic;
+    overflow-wrap:anywhere;
+  }
+  .massive-shake{animation:massiveShake .25s linear infinite;}
+  @keyframes massiveShake{
+    0%{transform:translate(0,0) rotate(0deg);}
+    25%{transform:translate(3px,-3px) rotate(4deg);}
+    50%{transform:translate(-3px,3px) rotate(-4deg);}
+    75%{transform:translate(3px,3px) rotate(3deg);}
+    100%{transform:translate(0,0) rotate(0deg);}
+  }
+
+  @media (max-width:600px){
+    header{padding:20px 12px 6px;}
+    header p{font-size:13px;}
+    .input-section{flex-direction:column; margin:16px auto 8px;}
+    #hobbyInput{width:100%; font-size:16px; padding:13px 16px;}
+    #speciesSelect{width:100%; padding:12px;}
+    #addBtn{width:100%; padding:14px;}
+    .log-section{flex-direction:column;}
+    .log-btn{width:100%;}
+    .grid{
+      grid-template-columns:1fr;
+      gap:16px;
+      margin:16px auto 40px;
+      padding:0 12px;
+    }
+    .card{padding:14px;}
+    .hobby-name{font-size:17px;}
+    .creature-stage{height:130px;}
+    .toast{font-size:12px; padding:8px 16px; max-width:90vw; text-align:center;}
+    .toast-container{top:10px; width:100%; padding:0 10px;}
+  }
+
+  @media (max-width:480px){
+    .input-section{flex-direction:column;}
+  }
+</style>
+</head>
+<body>
+
+<div class="toast-container" id="toastContainer"></div>
+
+<header>
+  <h1>🧠 BRAINROT GROWTH LAB 💥</h1>
+  <p>feed your obsessions. watch them evolve into tralalero tralala & tung tung tung sahur.</p>
+</header>
+
+<div class="input-section">
+  <input id="hobbyInput" type="text" placeholder="e.g. Rock climbing, K-pop, competitive napping..." maxlength="40"/>
+  <select id="speciesSelect">
+    <option value="tralalero">🦈 Tralalero Tralala</option>
+    <option value="tungtung">🥁 Tung Tung Tung Sahur</option>
+    <option value="random">🎲 Surprise Me</option>
+  </select>
+  <button id="addBtn">+ SPAWN BRAINROT</button>
+</div>
+<div id="errorMsg"></div>
+<div style="text-align:center; font-size:12px; color:#8a76b8; margin-bottom:6px;">Max level is <b style="color:#fff700;">6767</b> — reach it to unlock a MASSIVE TRALALERO TRALALA 🌊🦈 <br/>💪 the more detailed your hobby log, the more brainrot points you earn</div>
+
+<div class="grid" id="grid"></div>
+
+<footer>every brainrot is saved locally in your browser. no data leaves this page. 🧬</footer>
+
+<script>
+const STORAGE_KEY = 'brainrot_hobbies_v1';
+
+const SPECIES_PALETTES = [
+  {name:'creative', colors:['#ff2ec4','#b026ff','#ff6ec7']},
+  {name:'physical', colors:['#39ff14','#00e5ff','#7bff5a']},
+  {name:'academic', colors:['#00e5ff','#5271ff','#8ecbff']},
+  {name:'social', colors:['#fff700','#ff9f1c','#ffd23f']},
+  {name:'chaos', colors:['#ff2e2e','#ff2ec4','#b026ff']},
+];
+
+const CREATIVE_WORDS = ['draw','paint','art','music','write','sing','guitar','photo','craft','design','sculpt','dance','film','edit'];
+const PHYSICAL_WORDS = ['run','gym','climb','yoga','sport','swim','bike','lift','box','soccer','basketball','hike','ski','skate'];
+const ACADEMIC_WORDS = ['read','study','code','program','math','science','chess','language','learn','research','physics'];
+const SOCIAL_WORDS = ['game','gaming','stream','chat','party','friends','talk','discord','social'];
+
+function classifyHobby(name){
+  const n = name.toLowerCase();
+  if (CREATIVE_WORDS.some(w=>n.includes(w))) return SPECIES_PALETTES[0];
+  if (PHYSICAL_WORDS.some(w=>n.includes(w))) return SPECIES_PALETTES[1];
+  if (ACADEMIC_WORDS.some(w=>n.includes(w))) return SPECIES_PALETTES[2];
+  if (SOCIAL_WORDS.some(w=>n.includes(w))) return SPECIES_PALETTES[3];
+  return SPECIES_PALETTES[Math.floor(Math.random()*SPECIES_PALETTES.length)];
+}
+
+const FLAVOR_MESSAGES = [
+  "Your brainrot is getting stronger.",
+  "You fed the obsession.",
+  "It's evolving into something concerning.",
+  "This hobby owns your mind now.",
+  "The creature demands more.",
+  "Neurons: officially cooked.",
+  "It just vibrated with pure joy.",
+  "Certified unhinged behavior detected.",
+];
+
+const VOICE_LINES = ["DO IT AGAIN","MORE.","YES.","AGAIN.","FEED ME","MOOOORE","LOCKED IN","W BEHAVIOR","🧠💥","CHAOS MODE","TRALALERO TRALALA","TUNG TUNG TUNG SAHUR","PATAPIM","BOMBARDIRO"];
+
+const STAGE_THRESHOLDS = [0,10,50,200,6767]; // counts needed to REACH stage index (0-4 => stages 1-5)
+const MAX_LEVEL = 6767;
+
+function getStage(count){
+  let stage = 1;
+  for(let i=STAGE_THRESHOLDS.length-1;i>=0;i--){
+    if(count>=STAGE_THRESHOLDS[i]){ stage = i+1; break; }
+  }
+  return Math.min(stage,5);
+}
+
+function loadHobbies(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    return raw ? JSON.parse(raw) : [];
+  }catch(e){ return []; }
+}
+function saveHobbies(list){
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
+}
+
+let hobbies = loadHobbies();
+
+function showToast(msg){
+  const c = document.getElementById('toastContainer');
+  const t = document.createElement('div');
+  t.className='toast';
+  t.textContent = msg;
+  c.appendChild(t);
+  setTimeout(()=>t.remove(), 2900);
+}
+
+function showError(msg){
+  const el = document.getElementById('errorMsg');
+  el.textContent = msg;
+  setTimeout(()=>{ if(el.textContent===msg) el.textContent=''; }, 2500);
+}
+
+function achievementFor(count, species){
+  if(count>=MAX_LEVEL) return "👑 MASSIVE TRALALERO TRALALA (LVL 6767)";
+  if(count>=200){
+    if(species==='tralalero') return "🦈 TRALALERO SUPREMO";
+    if(species==='tungtung') return "🥁 TUNG TUNG OVERLORD";
+    return "🏆 UNHINGED DEVOTEE";
+  }
+  if(count>=50) return "🔥 BRAINROT MASTER";
+  if(count>=10) return "😵 CERTIFIED OBSESSED";
+  if(count>=3) return "✨ RISING FIXATION";
+  return "";
+}
+
+const SPECIES_NAMES = {
+  tralalero: "🦈 Tralalero Tralala",
+  tungtung: "🥁 Tung Tung Tung Sahur",
+};
+
+function creatureHTML(hobby){
+  const stage = getStage(hobby.count);
+  const isMaxed = hobby.count>=MAX_LEVEL;
+  const palette = hobby.palette.colors;
+  const c1 = palette[0], c2 = palette[1], c3 = palette[2];
+  const mutation = hobby.mutation;
+  const species = hobby.species || 'tralalero';
+
+  let extraLimbs = '';
+  let extraEyes = '';
+  let sparkles = '';
+  let glowRing = '';
+
+  if(stage>=3){
+    extraLimbs = `
+      <div class="limb" style="background:${c2}; top:20%; left:-6px; transform:rotate(-30deg);"></div>
+      <div class="limb" style="background:${c2}; top:20%; right:-6px; transform:rotate(30deg);"></div>
+    `;
+  }
+  if(stage>=4){
+    extraLimbs += `
+      <div class="limb" style="background:${c3}; bottom:-4px; left:10px; transform:rotate(20deg);"></div>
+      <div class="limb" style="background:${c3}; bottom:-4px; right:10px; transform:rotate(-20deg);"></div>
+    `;
+  }
+  if(mutation==='extraEyes' && stage>=3){
+    extraEyes = `<div class="eye" style="top:20%; left:44%;"></div>`;
+  }
+  if(mutation==='sparkles' && stage>=2){
+    sparkles = `<span class="spark" style="top:-10px; left:-10px;">✨</span><span class="spark" style="top:-14px; right:-8px;">⭐</span>`;
+  }
+  if(stage>=5){
+    glowRing = `<div class="glow-ring"></div>`;
+  }
+
+  const animClass = isMaxed ? 'anim-idle5 massive-shake' : 'anim-idle'+stage;
+  const size = 60 + stage*10;
+
+  // MAX LEVEL 6767 -> always evolves into a MASSIVE Tralalero Tralala, regardless of chosen species
+  if(isMaxed){
+    const megaSize = size + 60;
+    const finSize = 42;
+    return `
+      <div class="creature ${animClass}" style="width:${megaSize+50}px;height:${megaSize+50}px;">
+        <div class="glow-ring" style="width:${megaSize+70}px;height:${megaSize+70}px; background:radial-gradient(circle, rgba(255,215,63,0.55), transparent 70%);"></div>
+        <div class="blob" style="width:${megaSize+30}px;height:${megaSize*0.8}px;border-radius:50% 50% 42% 42% / 62% 62% 38% 38%;background:linear-gradient(160deg, #3fd2ff, #0057ff);box-shadow:0 0 40px #00e5ff, 0 0 70px #ff2ec4;">
+          <div style="position:absolute; top:-${finSize*0.75}px; left:50%; transform:translateX(-50%); width:0; height:0; border-left:${finSize/2}px solid transparent; border-right:${finSize/2}px solid transparent; border-bottom:${finSize}px solid #3fd2ff;"></div>
+          <div class="limb" style="background:#0057ff; top:15%; left:-10px; transform:rotate(-35deg); width:12px; height:34px;"></div>
+          <div class="limb" style="background:#0057ff; top:15%; right:-10px; transform:rotate(35deg); width:12px; height:34px;"></div>
+          <div class="eye left" style="width:22px;height:22px;background:#fff700;box-shadow:0 0 14px #fff700;"></div>
+          <div class="eye right" style="width:22px;height:22px;background:#fff700;box-shadow:0 0 14px #fff700;"></div>
+          <div class="mouth" style="width:${megaSize*0.4}px;height:20px;border-bottom:5px solid #111;border-radius:0 0 60% 60%; display:flex; justify-content:space-around;">
+            <span class="tooth"></span><span class="tooth"></span><span class="tooth"></span>
+          </div>
+          <div class="shoe left" style="width:22px;height:14px;"></div>
+          <div class="shoe right" style="width:22px;height:14px;"></div>
+          <span class="spark" style="top:-20px; left:-20px; font-size:20px;">✨</span>
+          <span class="spark" style="top:-24px; right:-16px; font-size:20px;">🌊</span>
+          <span class="spark" style="bottom:-14px; left:50%; font-size:18px;">💥</span>
+        </div>
+      </div>
+    `;
+  }
+
+  // Tralalero Tralala: shark-shaped, gains fin/teeth/shoes as it grows
+  if(species==='tralalero'){
+    const finSize = 10 + stage*3;
+    const showTeeth = stage>=3;
+    const teethHTML = showTeeth ? '<span class="tooth"></span><span class="tooth"></span><span class="tooth"></span>' : '';
+    return `
+      <div class="creature ${animClass}">
+        ${glowRing}
+        <div class="blob" style="width:${size+20}px;height:${size*0.75}px;border-radius:50% 50% 40% 40% / 60% 60% 40% 40%;background:linear-gradient(160deg, ${c2}, ${c1});box-shadow:0 0 ${10+stage*6}px ${c1};">
+          <div style="position:absolute; top:-${finSize*0.7}px; left:50%; transform:translateX(-50%); width:0; height:0; border-left:${finSize/2}px solid transparent; border-right:${finSize/2}px solid transparent; border-bottom:${finSize}px solid ${c2};"></div>
+          ${extraLimbs}
+          <div class="eye left" style="${stage>=5?'width:18px;height:18px;background:'+c3+';box-shadow:0 0 10px '+c3+';':''}"></div>
+          <div class="eye right" style="${stage>=5?'width:18px;height:18px;background:'+c3+';box-shadow:0 0 10px '+c3+';':''}"></div>
+          ${extraEyes}
+          <div class="mouth" style="width:26px;height:${showTeeth?16:12}px;border-bottom:4px solid #111;border-radius:0 0 60% 60%; display:flex; justify-content:space-around; align-items:flex-start; overflow:hidden;">
+            ${teethHTML}
+          </div>
+          <div class="shoe left"></div>
+          <div class="shoe right"></div>
+        </div>
+        ${sparkles}
+      </div>
+    `;
+  }
+
+  // Tung Tung Tung Sahur: wooden drum-shaped, gains drumsticks/bands as it grows
+  return `
+    <div class="creature ${animClass}">
+      ${glowRing}
+      <div class="blob" style="width:${size*0.75}px;height:${size*1.15}px;border-radius:18%;background:linear-gradient(180deg, #c98a4b, #6b431c);box-shadow:0 0 ${10+stage*6}px ${c1};">
+        <div class="drum-band top"></div>
+        <div class="drum-band bottom"></div>
+        ${stage>=3 ? '<div class="drumstick" style="left:-16px; top:10%; transform:rotate(-25deg);"></div><div class="drumstick" style="right:-16px; top:10%; transform:rotate(25deg);"></div>' : extraLimbs}
+        <div class="eye left" style="${stage>=5?'width:18px;height:18px;background:'+c3+';box-shadow:0 0 10px '+c3+';':''}"></div>
+        <div class="eye right" style="${stage>=5?'width:18px;height:18px;background:'+c3+';box-shadow:0 0 10px '+c3+';':''}"></div>
+        ${extraEyes}
+        <div class="mouth" style="width:22px;height:10px;border-bottom:4px solid #111;border-radius:0 0 60% 60%;"></div>
+      </div>
+      ${sparkles}
+    </div>
+  `;
+}
+
+const STAGE_LABELS = ['','TINY SPARK','GETTING HYPED','CHAOTIC ENERGY','MEME OVERLORD','MAX BRAINROT 🔥'];
+
+function render(){
+  const grid = document.getElementById('grid');
+  grid.innerHTML = '';
+  if(hobbies.length===0){
+    grid.innerHTML = `<div class="empty-state">No brainrots yet... add a hobby above to spawn your first creature 👆</div>`;
+    return;
+  }
+  hobbies.forEach(hobby=>{
+    const stage = getStage(hobby.count);
+    const isMaxed = hobby.count>=MAX_LEVEL;
+    const card = document.createElement('div');
+    card.className = 'card stage'+stage;
+    card.dataset.id = hobby.id;
+    const achievement = achievementFor(hobby.count, hobby.species);
+    const speciesTag = !isMaxed
+      ? `<span class="species-tag">${SPECIES_NAMES[hobby.species] || SPECIES_NAMES.tralalero}</span>`
+      : `<span class="max-badge">👑 MAX LEVEL 6767 REACHED</span>`;
+    const lastLog = hobby.logs && hobby.logs.length
+      ? `<div class="last-log">📝 "${escapeHTML(hobby.logs[hobby.logs.length-1])}"</div>` : '';
+    card.innerHTML = `
+      <div class="card-header">
+        <div class="hobby-name">${escapeHTML(hobby.name)}</div>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;">
+          <button class="delete-btn" title="release brainrot">✕</button>
+          <span class="stage-badge">${isMaxed ? 'MAX BRAINROT 🔥' : STAGE_LABELS[stage]}</span>
+        </div>
+      </div>
+      <div class="creature-stage">${creatureHTML(hobby)}</div>
+      ${speciesTag}
+      <div class="counter-row">
+        <span>brainrot points (max: 6767)</span>
+        <span class="counter-num">${hobby.count}</span>
+      </div>
+      <div class="log-section">
+        <input type="text" class="log-input" placeholder="What did you do for this hobby? (more detail = more points)" maxlength="280" ${isMaxed?'disabled':''}/>
+        <button class="log-btn" ${isMaxed?'disabled':''}>${isMaxed ? 'MAXED 👑' : 'LOG IT'}</button>
+      </div>
+      ${lastLog}
+      <div class="flavor-text">${achievement ? `<span class="achievement-badge">${achievement}</span>` : '💪 write more detail to earn more brainrot points'}</div>
+    `;
+    const logInput = card.querySelector('.log-input');
+    const logBtn = card.querySelector('.log-btn');
+    const submit = ()=>logHobby(hobby.id, logInput.value);
+    logBtn.addEventListener('click', submit);
+    logInput.addEventListener('keydown', e=>{ if(e.key==='Enter') submit(); });
+    card.querySelector('.delete-btn').addEventListener('click', ()=>deleteHobby(hobby.id));
+    grid.appendChild(card);
+  });
+}
+
+function escapeHTML(s){
+  const div = document.createElement('div');
+  div.textContent = s;
+  return div.innerHTML;
+}
+
+function calcBrainrotPoints(text){
+  const words = text.trim().split(/\s+/).filter(Boolean);
+  const wordCount = words.length;
+  const charCount = text.trim().length;
+  const uniqueWords = new Set(words.map(w=>w.toLowerCase())).size;
+
+  // Base point for showing up, then scale with detail: word count, length, and vocabulary variety.
+  let points = 1;
+  points += Math.floor(wordCount / 2);
+  points += Math.floor(charCount / 40);
+  points += Math.floor(uniqueWords / 3);
+
+  // Cap a single entry so max level still takes real, repeated effort.
+  points = Math.max(1, Math.min(points, 40));
+  return points;
+}
+
+function logHobby(id, text){
+  const trimmed = (text||'').trim();
+  if(!trimmed){
+    showError("Write what you did for this hobby first!");
+    return;
+  }
+  const hobby = hobbies.find(h=>h.id===id);
+  if(!hobby) return;
+  if(hobby.count>=MAX_LEVEL) return;
+
+  const prevStage = getStage(hobby.count);
+  const pointsEarned = calcBrainrotPoints(trimmed);
+  hobby.count = Math.min(hobby.count+pointsEarned, MAX_LEVEL);
+  const newStage = getStage(hobby.count);
+
+  if(!hobby.logs) hobby.logs = [];
+  hobby.logs.push(trimmed);
+  if(hobby.logs.length>5) hobby.logs.shift();
+
+  // random decorative mutation chance (extra eyes / sparkles) at higher counts, species stays fixed
+  if(!hobby.mutation && hobby.count>=10){
+    const roll = Math.random();
+    if(roll<0.5) hobby.mutation = 'extraEyes';
+    else if(roll<0.8) hobby.mutation = 'sparkles';
+  }
+
+  saveHobbies(hobbies);
+  render();
+
+  const card = document.querySelector(`.card[data-id="${id}"]`);
+  if(card){
+    card.classList.add('glitching');
+    setTimeout(()=>card.classList.remove('glitching'), 400);
+    const creature = card.querySelector('.creature');
+    if(creature){
+      creature.classList.add('feed-pulse');
+      setTimeout(()=>creature.classList.remove('feed-pulse'), 600);
+    }
+    if(Math.random()<0.6){
+      const vl = document.createElement('div');
+      vl.className='voice-line';
+      vl.textContent = VOICE_LINES[Math.floor(Math.random()*VOICE_LINES.length)];
+      const stageArea = card.querySelector('.creature-stage');
+      stageArea.style.position='relative';
+      stageArea.appendChild(vl);
+      setTimeout(()=>vl.remove(), 1000);
+    }
+  }
+
+  if(hobby.count>=MAX_LEVEL){
+    showToast(`👑 +${pointsEarned} pts → MAX LEVEL 6767 REACHED! ${hobby.name} has become a MASSIVE TRALALERO TRALALA!`);
+  } else if(newStage>prevStage){
+    showToast(`+${pointsEarned} brainrot points! ${hobby.name} EVOLVED → Stage ${newStage}: ${STAGE_LABELS[newStage]}!`);
+  } else if(pointsEarned>=10){
+    showToast(`+${pointsEarned} brainrot points! That level of detail is unhinged. 🧠`);
+  } else {
+    showToast(`+${pointsEarned} pt${pointsEarned===1?'':'s'} — ${FLAVOR_MESSAGES[Math.floor(Math.random()*FLAVOR_MESSAGES.length)]}`);
+  }
+}
+
+function deleteHobby(id){
+  hobbies = hobbies.filter(h=>h.id!==id);
+  saveHobbies(hobbies);
+  render();
+}
+
+function addHobby(){
+  const input = document.getElementById('hobbyInput');
+  const speciesSelect = document.getElementById('speciesSelect');
+  const name = input.value.trim();
+  if(!name){
+    showError("Enter a hobby first, genius.");
+    return;
+  }
+  if(hobbies.some(h=>h.name.toLowerCase()===name.toLowerCase())){
+    showError("That brainrot already exists. Go log progress on it instead!");
+    return;
+  }
+  let species = speciesSelect.value;
+  if(species==='random'){
+    species = Math.random()<0.5 ? 'tralalero' : 'tungtung';
+  }
+  const newHobby = {
+    id: Date.now().toString()+Math.random().toString(36).slice(2,7),
+    name,
+    count: 0,
+    palette: classifyHobby(name),
+    mutation: null,
+    species,
+    logs: [],
+  };
+  hobbies.push(newHobby);
+  saveHobbies(hobbies);
+  input.value = '';
+  render();
+  showToast(`${name} brainrot has spawned as ${SPECIES_NAMES[species]}! Max level: 6767 👑`);
+}
+
+document.getElementById('addBtn').addEventListener('click', addHobby);
+document.getElementById('hobbyInput').addEventListener('keydown', e=>{
+  if(e.key==='Enter') addHobby();
+});
+
+render();
+</script>
+</body>
+</html>
